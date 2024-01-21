@@ -1,5 +1,6 @@
 // MapComponent.js
 import React from "react";
+import axios from 'axios';
 import { MapContainer, TileLayer, ImageOverlay } from "react-leaflet";
 
 const MapComponent = ({ children }) => {
@@ -7,6 +8,15 @@ const MapComponent = ({ children }) => {
     lat: 49.2827, // Vancouver latitude
     lng: -123.1207, // Vancouver longitude
   };
+
+  const apiCall = async () => {
+
+    await axios.get("http://127.0.0.1:5000/").then(res => {
+      console.log(res);
+    });
+  }
+
+  apiCall();
 
   return (
     <MapContainer
