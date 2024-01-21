@@ -4,20 +4,24 @@ import {
   MapContainer,
   TileLayer,
   Marker,
-  useMapEvents,
-  useMap,
+  useMapEvents, useMap
 } from "react-leaflet";
+import {useEffect} from 'react';
 
 const MapComponent = (props) => {
   const defaultCenter = {
     lat: 49.2827, // Vancouver latitude
     lng: -123.1207, // Vancouver longitude
   };
+  // const map = useMap();
+
 
   const { center, setCenter } = props;
 
+
   const MapEvents = () => {
     const map = useMap();
+
 
     useMapEvents({
       click(e) {
@@ -27,6 +31,23 @@ const MapComponent = (props) => {
     });
     return false;
   };
+
+  // const MapEvents2 = (lat, lng) => {
+  //   const map = useMap();
+
+
+  //   useMapEvents({
+  //     click(e) {
+  //       setCenter([lat, lng]);
+  //       map.flyTo({ lat:lat, lng:lng });
+  //     },
+  //   });
+  //   return false;
+  // };
+
+  // useEffect(() => {
+  //   MapEvents2(center[0], center[1])
+  // }, center)
 
   return (
     <>

@@ -13,6 +13,10 @@ import {
 } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import axios from 'axios';
+import {
+  useMap,
+} from "react-leaflet";
 
 const MenuOpenButton = styled(IconButton)`
   position: absolute;
@@ -71,7 +75,6 @@ const CollapseButton = styled(Button)`
 `;
 
 export const Menu = (props) => {
-  const [open, setOpen] = useState(false);
   const [distVal, setDistVal] = useState("");
   const [coordinates, setCoordinates] = useState("");
   const [eleVal, setEleVal] = useState("");
@@ -81,7 +84,7 @@ export const Menu = (props) => {
   const [distSliderVal, setDistSliderVal] = useState(0);
   const [eleSliderVal, setEleSliderVal] = useState(0);
 
-  const { center } = props;
+  const { center, setCenter, open, setOpen, setRespData } = props;
 
   useEffect(() => {
     if (center !== null) {
@@ -132,7 +135,40 @@ export const Menu = (props) => {
     }
   };
 
-  const fetchRoutes = () => {};
+  const fetchRoutes = async () => {
+
+
+    getCoordinates().then(response=>{
+
+
+      setOpen(false)
+      setCenter([response[0], response[1]])
+      axios.get(`http://127.0.0.1:5000/get/${response[0]}/${response[1]}`).then(response => {
+        console.log(response)
+        setRespData(response.data)
+    });})
+  };
+
+  const getCoordinates = async () => {
+    try {
+      const response = await axios.get(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+          coordinates
+        )}`
+      );
+
+      if (response.data.length > 0) {
+        const { lat, lon } = response.data[0];
+        // setCoordinates({ latitude: lat, longitude: lon });
+        console.log(lat, lon)
+        return([lat, lon]);
+      } else {
+        console.error('No results found for the given address.');
+      }
+    } catch (error) {
+      console.error('Error fetching coordinates:', error);
+    }
+  };
 
   const handleCollapse = () => {
     setExpandCollapse(!expandCollapse);
