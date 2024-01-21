@@ -5,6 +5,7 @@ import {
   TileLayer,
   ImageOverlay,
   useMapEvents,
+  useMap
 } from "react-leaflet";
 
 const MapComponent = () => {
@@ -19,11 +20,14 @@ const MapComponent = () => {
   });
 
   const MapEvents = () => {
+    const map = useMap();
+
     useMapEvents({
       click(e) {
         // send lat and lng here;
         // center map to location as well
         setCenter({ lat: e.latlng.lat, lng: e.latlng.lng });
+        map.flyTo({ lat: e.latlng.lat, lng: e.latlng.lng })
       },
     });
     return false;
