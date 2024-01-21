@@ -37,27 +37,27 @@ const fetchRoute = async (start, end) => {
   const apiKey =
     "pk.eyJ1IjoiY3dvbiIsImEiOiJjbHJtcDhucDQxMjY4MmtrZHA4cjY4Yzk0In0.pUcXee7umuJcGYPfes9kSQ"; // Replace with your Mapbox API key
   const response = await fetch(
-    "https://api.mapbox.com/directions/v5/mapbox/walking/-123.215143%2C49.263605%3B-123.12716%2C49.282319?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=full&steps=true&access_token=pk.eyJ1IjoiY3dvbiIsImEiOiJjbHJtcDhucDQxMjY4MmtrZHA4cjY4Yzk0In0.pUcXee7umuJcGYPfes9kSQ"
+    "https://api.mapbox.com/directions/v5/mapbox/walking/-123.215143%2C49.263605%3B-123.12716%2C49.282319?alternatives=true&continue_straight=true&geometries=geojson&language=en&overview=simplified&steps=true&access_token=pk.eyJ1IjoiY3dvbiIsImEiOiJjbHJtcDhucDQxMjY4MmtrZHA4cjY4Yzk0In0.pUcXee7umuJcGYPfes9kSQ"
   );
   console.log(response);
   const data = await response.json();
   console.log(data);
   console.log(data.routes[0].geometry.coordinates);
-  return data.routes[0].geometry.coordinates;
+  var retArr = [];
+  data.routes[0].geometry.coordinates.map((route, index) => {
+    retArr[index] = [route[1], route[0]];
+  });
+  return retArr;
 };
 
 const RouteComponent = ({ start, end }) => {
-  const { data: routeCoordinates } = useQuery(["route", start, end], () =>
-    fetchRoute(start, end)
-  );
-
-  // const [routeCoordinates, setRouteCoordinates] = useState(null);
-  // useEffect(() => {
-  //   setRouteCoordinates(fetchRoute(start, end));
-  // }, []);
+  // const { data: routeCoordinates } = useQuery(["route", start, end], () =>
+  //   fetchRoute(start, end)
+  // );
+  const routeCoordinates = null;
 
   return routeCoordinates ? (
-    <Polyline positions={routeCoordinates} color="black" />
+    <Polyline positions={routeCoordinates} color="red" />
   ) : null;
 };
 
