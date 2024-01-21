@@ -8,20 +8,19 @@ import {
   useMap,
 } from "react-leaflet";
 
-const MapComponent = () => {
+const MapComponent = (props) => {
   const defaultCenter = {
     lat: 49.2827, // Vancouver latitude
     lng: -123.1207, // Vancouver longitude
   };
 
-  const [center, setCenter] = useState(null);
+  const { center, setCenter } = props;
 
   const MapEvents = () => {
     const map = useMap();
 
     useMapEvents({
       click(e) {
-        // send lat and lng here;
         setCenter([e.latlng.lat, e.latlng.lng]);
         map.flyTo({ lat: e.latlng.lat, lng: e.latlng.lng });
       },

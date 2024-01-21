@@ -6,8 +6,12 @@ import {
   Drawer,
   Stack,
   InputAdornment,
+  Collapse,
+  Typography,
+  Slider,
+  Button,
 } from "@mui/material";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 
 const MenuOpenButton = styled(IconButton)`
@@ -26,41 +30,173 @@ const CustomDrawer = styled(Drawer)`
   .MuiDrawer-paper {
     width: 50%;
     margin: auto;
-    padding-left: 16px;
-    padding-top: 16px;
     padding-bottom: 16px;
   }
 `;
 
 const DrawerContainer = styled(Stack)`
+  flex-direction: column;
+`;
+
+const MainDrawerContainer = styled(Stack)`
+  padding-left: 16px;
+  padding-top: 16px;
   flex-direction: row;
+`;
+
+const CollapseButton = styled(Button)`
+  width: fit-content;
+  padding: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-left: 16px;
 `;
 
 export const Menu = (props) => {
   const [open, setOpen] = useState(false);
-  const [distVal, setDistVal] = useState(null);
-  const [fieldValue, setFieldValue] = useState("");
+  const [distVal, setDistVal] = useState("");
+  const [coordinates, setCoordinates] = useState("");
+  const [eleVal, setEleVal] = useState("");
+  const [numRoutes, setNumRoutes] = useState("");
+  const [expandCollapse, setExpandCollapse] = useState(false);
 
-  // const { setCoords } = props;
+  const [distSliderVal, setDistSliderVal] = useState(0);
+  const [eleSliderVal, setEleSliderVal] = useState(0);
+
+  const { center } = props;
+
+  useEffect(() => {
+    if (center !== null) {
+      setCoordinates(String(center[0]) + ", " + String(center[1]));
+    }
+  }, [center]);
 
   const updateValue = (e) => {
-    setFieldValue(e.target.value);
+    setCoordinates(e.target.value);
   };
 
   const updateDistVal = (e) => {
-    if (e.target.value === "") {
-      setDistVal("");
-    } else if (!e.target.value.match(/[a-z || A-Z]/)) {
-      setDistVal(Number(e.target.value));
+    if (
+      e.target.value === "" ||
+      e.target.value.match(
+        /[a-z || A-Z || .,\/#!$%\^&\*;:{}=\-_`~()\'\[\]\+\\\"\?\>\< || \s]/
+      )
+    ) {
+      setDistVal(distVal);
     } else {
-      setDistVal("");
+      setDistVal(Number(e.target.value));
     }
   };
 
-  const fetchRoutes = () => {
-    // const response = fetch();
-    // setCoords(response);
+  const updateEleValue = (e) => {
+    if (
+      e.target.value === "" ||
+      e.target.value.match(
+        /[a-z || A-Z || .,\/#!$%\^&\*;:{}=\-_`~()\'\[\]\+\\\"\?\>\< || \s]/
+      )
+    ) {
+      setEleVal(eleVal);
+    } else {
+      setEleVal(Number(e.target.value));
+    }
   };
+
+  const updateNumRoutes = (e) => {
+    if (
+      e.target.value === "" ||
+      e.target.value.match(
+        /[a-z || A-Z || .,\/#!$%\^&\*;:{}=\-_`~()\'\[\]\+\\\"\?\>\< || \s]/
+      )
+    ) {
+      setNumRoutes(numRoutes);
+    } else {
+      setNumRoutes(Number(e.target.value));
+    }
+  };
+
+  const fetchRoutes = () => {};
+
+  const handleCollapse = () => {
+    setExpandCollapse(!expandCollapse);
+  };
+
+  const distMarks = [
+    {
+      value: 0,
+      label: "+/- 0",
+    },
+    {
+      value: 0.1,
+    },
+    {
+      value: 0.2,
+    },
+    {
+      value: 0.3,
+    },
+    {
+      value: 0.4,
+    },
+    {
+      value: 0.5,
+      label: "+/- 0.5",
+    },
+    {
+      value: 0.6,
+    },
+    {
+      value: 0.7,
+    },
+    {
+      value: 0.8,
+    },
+    {
+      value: 0.9,
+    },
+    {
+      value: 1,
+      label: "+/- 1",
+    },
+  ];
+
+  const eleMarks = [
+    {
+      value: 0,
+      label: "+/- 0",
+    },
+    {
+      value: 5,
+    },
+    {
+      value: 10,
+    },
+    {
+      value: 15,
+    },
+    {
+      value: 20,
+    },
+    {
+      value: 25,
+      label: "+/- 25",
+    },
+    {
+      value: 30,
+    },
+    {
+      value: 35,
+    },
+    {
+      value: 40,
+    },
+    {
+      value: 45,
+    },
+    {
+      value: 50,
+      label: "+/- 50",
+    },
+  ];
 
   return (
     <>
@@ -79,29 +215,91 @@ export const Menu = (props) => {
         }}
       >
         <DrawerContainer>
-          <TextField
-            label="Distance"
-            value={distVal}
-            onChange={updateDistVal}
-            fullWidth
-            InputProps={{
-              endAdornment: <InputAdornment position="end">km</InputAdornment>,
-            }}
-            sx={{ mr: "16px" }}
-          />
-          <TextField
-            label="Starting Point"
-            value={fieldValue}
-            onChange={updateValue}
-            fullWidth
-          />
-          <SearchButton
-            sx={{ color: "#1976d2" }}
-            disabled={fieldValue === "" || distVal === ""}
-            onClick={fetchRoutes}
-          >
-            <SearchIcon />
-          </SearchButton>
+          <MainDrawerContainer>
+            <TextField
+              label="Distance"
+              value={distVal}
+              onChange={updateDistVal}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">km</InputAdornment>
+                ),
+              }}
+              sx={{ mr: "16px" }}
+            />
+            <TextField
+              label="Starting Point"
+              value={coordinates}
+              onChange={updateValue}
+              fullWidth
+            />
+            <SearchButton
+              sx={{ color: "#1976d2" }}
+              disabled={coordinates === "" || distVal === ""}
+              onClick={fetchRoutes}
+            >
+              <SearchIcon />
+            </SearchButton>
+          </MainDrawerContainer>
+          <CollapseButton onClick={handleCollapse} size="small">
+            Other Options
+          </CollapseButton>
+          <Collapse in={expandCollapse}>
+            <Stack spacing={1} sx={{ pl: "16px", pr: "16px", mt: "8px" }}>
+              <Stack direction="row">
+                <TextField
+                  label="Elevation"
+                  value={eleVal}
+                  onChange={updateEleValue}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">m</InputAdornment>
+                    ),
+                  }}
+                  sx={{ mr: "16px" }}
+                />
+                <TextField
+                  label="Number of Running Routes"
+                  value={numRoutes}
+                  onChange={updateNumRoutes}
+                  fullWidth
+                />
+              </Stack>
+              <Stack
+                direction="row"
+                sx={{ justifyContent: "space-between", pl: "16px", pr: "16px" }}
+              >
+                <Stack sx={{ width: "40%" }}>
+                  <Typography>Distance Margin of Error</Typography>
+                  <Slider
+                    step={0.1}
+                    marks={distMarks}
+                    min={0}
+                    max={1}
+                    value={distSliderVal}
+                    onChange={(e, val) => setDistSliderVal(val)}
+                    valueLabelDisplay="auto"
+                  />
+                </Stack>
+                <Stack sx={{ width: "40%" }}>
+                  <Typography>Elevation Margin of Error</Typography>
+                  <Slider
+                    defaultValue={0}
+                    step={5}
+                    marks={eleMarks}
+                    min={0}
+                    max={50}
+                    value={eleSliderVal}
+                    onChange={(e, val) => setEleSliderVal(val)}
+                    valueLabelDisplay="auto"
+                  />
+                </Stack>
+              </Stack>
+              <Stack direction="row"></Stack>
+            </Stack>
+          </Collapse>
         </DrawerContainer>
       </CustomDrawer>
     </>

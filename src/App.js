@@ -11,13 +11,14 @@ const MainComponent = () => {
   const endPoint = [49.26411700132184, -123.21537018955787];
 
   // const [coords, setCoords] = useState(null);
+  const [center, setCenter] = useState(null);
 
   const queryClient = new QueryClient();
 
   return (
     <Stack alignItems="center">
       <QueryClientProvider client={queryClient}>
-        <MapComponent>
+        <MapComponent center={center} setCenter={setCenter}>
           <RouteComponent
             start={startPoint}
             end={endPoint}
@@ -26,7 +27,8 @@ const MainComponent = () => {
         </MapComponent>
       </QueryClientProvider>
       <Menu
-      //  setCoords={setCoords}
+        center={center}
+        //  setCoords={setCoords}
       />
     </Stack>
   );
