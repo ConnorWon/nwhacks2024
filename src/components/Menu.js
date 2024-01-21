@@ -1,5 +1,12 @@
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { IconButton, TextField, styled, Drawer, Stack } from "@mui/material";
+import {
+  IconButton,
+  TextField,
+  styled,
+  Drawer,
+  Stack,
+  InputAdornment,
+} from "@mui/material";
 import { useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -77,6 +84,9 @@ export const Menu = (props) => {
             value={distVal}
             onChange={updateDistVal}
             fullWidth
+            InputProps={{
+              endAdornment: <InputAdornment position="end">km</InputAdornment>,
+            }}
             sx={{ mr: "16px" }}
           />
           <TextField
