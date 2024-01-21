@@ -1,25 +1,22 @@
-import logo from './logo.svg';
-import './App.css';
+// MainComponent.js
+import React from "react";
+import MapComponent from "./components/MapComponent";
+import RouteComponent from "./components/RouteComponent";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-function App() {
+const MainComponent = () => {
+  const startPoint = [49.2827, -123.1207];
+  const endPoint = [49.26411700132184, -123.21537018955787];
+
+  const queryClient = new QueryClient();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <MapComponent>
+        <RouteComponent start={startPoint} end={endPoint} />
+      </MapComponent>
+    </QueryClientProvider>
   );
-}
+};
 
-export default App;
+export default MainComponent;
