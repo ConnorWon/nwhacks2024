@@ -19,11 +19,26 @@ const MenuOpenButton = styled(IconButton)`
   bottom: 1%;
   z-index: 999;
   background-color: white;
+
+  @media (prefers-color-scheme: dark) {
+    filter: var(--leaflet-tile-filter, none);
+    :hover {
+      background-color: rgba(256, 256, 256, 0.9);
+    }
+  }
 `;
 
 const SearchButton = styled(IconButton)`
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
+  margin: 8px;
+  padding: 0;
+  @media (prefers-color-scheme: dark) {
+    filter: var(--leaflet-tile-filter, none);
+    :hover {
+      background-color: rgba(256, 256, 256, 0.1);
+    }
+  }
 `;
 
 const CustomDrawer = styled(Drawer)`
@@ -31,6 +46,9 @@ const CustomDrawer = styled(Drawer)`
     width: 50%;
     margin: auto;
     padding-bottom: 16px;
+    @media (prefers-color-scheme: dark) {
+      filter: var(--leaflet-tile-filter, none);
+    }
   }
 `;
 
