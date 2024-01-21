@@ -1,7 +1,7 @@
 // MapComponent.js
 import React from "react";
 import axios from 'axios';
-import { MapContainer, TileLayer, ImageOverlay } from "react-leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 
 const MapComponent = ({ children }) => {
   const center = {

@@ -3,17 +3,35 @@ import React from "react";
 import MapComponent from "./components/MapComponent";
 import RouteComponent from "./components/RouteComponent";
 import { QueryClient, QueryClientProvider } from "react-query";
+import axios from 'axios';
 
 const MainComponent = () => {
-  const startPoint = [49.2827, -123.1207];
-  const endPoint = [49.26411700132184, -123.21537018955787];
+  
+  // inputArray is a tuple that consists of the longitude and latitude from the user
+  const fetchRoute = async (inputArray) => {
+    await axios.get("http://127.0.0.1:5000", {
+      content: inputArray
+    }).then(res => {
+
+      // switch to have the proper object desconstruction
+      console.log(res);
+      // this will be an array of tuples
+      return (res)
+    }).catch(err => {
+      // do something with the error
+
+      return([]);
+    })
+  }
 
   const queryClient = new QueryClient();
+
+
 
   return (
     <QueryClientProvider client={queryClient}>
       <MapComponent>
-        <RouteComponent start={startPoint} end={endPoint} />
+        <RouteComponent cord={fetchRoute} />
       </MapComponent>
     </QueryClientProvider>
   );
