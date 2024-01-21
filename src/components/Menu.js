@@ -226,6 +226,7 @@ export const Menu = (props) => {
                   <InputAdornment position="end">km</InputAdornment>
                 ),
               }}
+              required
               sx={{ mr: "16px" }}
             />
             <TextField
@@ -233,6 +234,7 @@ export const Menu = (props) => {
               value={coordinates}
               onChange={updateValue}
               fullWidth
+              required
             />
             <SearchButton
               sx={{ color: "#1976d2" }}
